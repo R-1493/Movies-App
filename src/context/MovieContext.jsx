@@ -62,7 +62,6 @@ function MovieContext() {
         </button>
       </form>
 
-      {/* Displaying a message for non-logged in users who try to search */}
       {!currentUser && (
         <div className="text-center py-4 text-gray-500 dark:text-gray-400">
           <p>Please log in to search for movies.</p>

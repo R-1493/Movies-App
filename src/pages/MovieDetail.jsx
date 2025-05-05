@@ -2,10 +2,10 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import VideoSection from "../components/VideoSection";
-import { useAuth } from "../context/AuthContext"; // Import useAuth hook
+import { useAuth } from "../context/AuthContext";
 
 const MovieDetail = () => {
-  const { currentUser } = useAuth(); // Get currentUser from AuthContext
+  const { currentUser } = useAuth(); 
   const [movieDetails, setMovieDetails] = useState("");
   const [videoId, setvideoId] = useState();
   const { id } = useParams();

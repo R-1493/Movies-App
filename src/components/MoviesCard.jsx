@@ -1,5 +1,6 @@
 import React from "react";
-import { useAuth } from "../context/AuthContext"; // Import useAuth hook
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const IMG_API = "https://image.tmdb.org/t/p/w1280";
 const defaultImage =
@@ -7,7 +8,7 @@ const defaultImage =
 
 function MoviesCard({ movie }) {
   if (!movie) return null;
-
+  const navigate = useNavigate();
   const { id, title, poster_path, vote_average, overview } = movie;
   const { currentUser } = useAuth();
 

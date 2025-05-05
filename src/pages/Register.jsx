@@ -9,7 +9,6 @@ export default function Register() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
-  const [displayName, setDisplayName] = useState("");
   const [error, setError] = useState("");
   const { signUp, signUpProvider } = useAuth();
   const navigate = useNavigate();
@@ -18,7 +17,8 @@ export default function Register() {
     e.preventDefault();
     setError("");
     try {
-      await signUp(firstName, lastName, email, password, displayName);
+      const displayName = `${firstName} ${lastName}`;
+      await signUp(email, password, displayName);
       toastSuccessNotify("Registered successfully!");
       navigate("/");
     } catch (err) {
@@ -50,7 +50,8 @@ export default function Register() {
               type="text"
               placeholder="First Name"
               className="peer"
-              onChange={(e) => setDisplayName(e.target.value)}
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
               required
             />
           </div>
@@ -69,6 +70,7 @@ export default function Register() {
               type="email"
               placeholder="Email"
               className="peer"
+              value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
             />
@@ -78,6 +80,7 @@ export default function Register() {
               type="password"
               placeholder="Password"
               className="peer"
+              value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
@@ -93,6 +96,12 @@ export default function Register() {
             <GoogleIcon color="currentColor" />
             Continue with Google
           </button>
+          <p className="mt-4 text-center text-gray-500">
+            Already have an account?{" "}
+            <Link to="/login" className="text-blue-500 hover:underline">
+              Login
+            </Link>
+          </p>
         </form>
       </div>
     </div>

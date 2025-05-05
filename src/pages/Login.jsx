@@ -1,7 +1,11 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { toastSuccessNotify, toastErrorNotify } from "../helpers/ToastNotify";
+import {
+  toastSuccessNotify,
+  toastErrorNotify,
+  toastWarnNotify,
+} from "../helpers/ToastNotify";
 import GoogleIcon from "../assets/GoogleIcon.jsx";
 
 export default function Login() {
@@ -10,20 +14,32 @@ export default function Login() {
   const [error, setError] = useState("");
   const { logIn, signUpProvider } = useAuth();
   const navigate = useNavigate();
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     try {
+      if (!email || !password) {
+        toastWarnNotify("Please fill in all fields");
+        return;
+      }
       await logIn(email, password);
       toastSuccessNotify("Logged in successfully!");
       navigate("/");
     } catch (err) {
-      setError(err.message);
-      toastErrorNotify(err.message);
+      let errorMessage = "Login failed";
+      if (err.code === "auth/invalid-email") {
+        errorMessage = "Invalid email address";
+      } else if (err.code === "auth/user-not-found") {
+        errorMessage = "No account found with this email";
+      } else if (err.code === "auth/wrong-password") {
+        errorMessage = "Incorrect password";
+      } else if (err.code === "auth/too-many-requests") {
+        errorMessage = "Too many attempts. Account temporarily disabled";
+      }
+      setError(errorMessage);
+      toastErrorNotify(errorMessage);
     }
   };
-
   const handleGoogleSignIn = async () => {
     try {
       await signUpProvider();
@@ -33,6 +49,7 @@ export default function Login() {
       toastErrorNotify(err.message);
     }
   };
+
   return (
     <div className="overflow-hidden flex-1 h-screen justify-center items-center dark:bg-gray-dark-main">
       <div className="form-container mt-[5vh] w-[380px] h-[580px]">
@@ -46,6 +63,7 @@ export default function Login() {
               type="email"
               placeholder="Email"
               className="peer"
+              value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
             />
@@ -55,6 +73,7 @@ export default function Login() {
               type="password"
               placeholder="Password"
               className="peer"
+              value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
@@ -70,7 +89,6 @@ export default function Login() {
               Sign Up
             </Link>
           </div>
-
           <button type="submit" className="btn-danger">
             Login
           </button>

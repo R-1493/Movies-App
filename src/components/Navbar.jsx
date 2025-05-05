@@ -6,7 +6,7 @@ import img from "../assets/avatar.png";
 
 const Navbar = () => {
   const { currentUser, logOut } = useAuth();
-  const menuRef = useRef();
+  const menuRef = useRef(null);
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -19,7 +19,7 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  return (setMenuOpen
+  return (
     <nav className="bg-neutral-100 dark:bg-gray-900 py-3 dark:text-white w-full">
       <div className="flex w-full flex-wrap items-center justify-between px-6">
         <Link className="pr-2 text-2xl font-semibold" to="/">
@@ -35,7 +35,7 @@ const Navbar = () => {
           <img
             className="h-8 w-8 rounded-full cursor-pointer"
             src={img}
-            onClick={() => (!menuOpen)}
+            onClick={() => setMenuOpen(!menuOpen)}
           />
           {menuOpen && (
             <div ref={menuRef} className="relative">

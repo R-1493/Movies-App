@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import MoviesCard from "../components/MoviesCard";
 import axios from "axios";
+import { useAuth } from "../context/AuthContext"; // Import useAuth hook
 
 const BASE_URL = "https://api.themoviedb.org/3";
 const POPULAR_URL = `${BASE_URL}/movie/popular?language=en-US&page=1`;
 const SEARCH_URL = `${BASE_URL}/search/movie?language=en-US&page=1&query=`;
 
 function MovieContext() {
+  const { currentUser } = useAuth(); // Get currentUser from AuthContext
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -52,10 +54,20 @@ function MovieContext() {
           onChange={(e) => setSearchTerm(e.target.value)}
           className="w-80 h-11 mr-2 block bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white text-sm rounded-md p-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
-        <button className="border-2 border-red-600 text-red-600 px-4 h-11 rounded-lg hover:bg-red-800 hover:text-white transition">
+        <button
+          className="border-2 border-red-600 text-red-600 px-4 h-11 rounded-lg hover:bg-red-800 hover:text-white transition"
+          disabled={!currentUser}
+        >
           Search
         </button>
       </form>
+
+      {/* Displaying a message for non-logged in users who try to search */}
+      {!currentUser && (
+        <div className="text-center py-4 text-gray-500 dark:text-gray-400">
+          <p>Please log in to search for movies.</p>
+        </div>
+      )}
 
       <div className="max-w-7xl mx-auto">
         {loading && (
@@ -82,6 +94,7 @@ function MovieContext() {
           ))}
         </div>
 
+        {/* Show message if no movies found */}
         {!loading && !error && movies.length === 0 && (
           <div className="text-center py-12">
             <p className="text-gray-500 dark:text-gray-400 text-lg">

@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { toastSuccessNotify, toastErrorNotify } from "../helpers/ToastNotify";
 import GoogleIcon from "../assets/GoogleIcon.jsx";
+
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -23,6 +24,15 @@ export default function Login() {
     }
   };
 
+  const handleGoogleSignIn = async () => {
+    try {
+      await signUpProvider();
+      toastSuccessNotify("Signed in with Google!");
+      navigate("/");
+    } catch (err) {
+      toastErrorNotify(err.message);
+    }
+  };
   return (
     <div className="overflow-hidden flex-1 h-screen justify-center items-center dark:bg-gray-dark-main">
       <div className="form-container mt-[5vh] w-[380px] h-[580px]">

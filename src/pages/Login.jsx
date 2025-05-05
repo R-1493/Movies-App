@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { toastSuccessNotify, toastErrorNotify } from "../helpers/ToastNotify";
-
+import GoogleIcon from "../assets/GoogleIcon.jsx";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -65,12 +65,12 @@ export default function Login() {
             Login
           </button>
           <button
-            className="flex justify-between text-center btn-danger"
             type="button"
             onClick={() => signUpProvider()}
+            className="flex items-center justify-center gap-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition"
           >
-            {" "}
             Continue with Google
+            <GoogleIcon color="currentColor" />
           </button>
         </form>
       </div>

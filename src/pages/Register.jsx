@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { toastSuccessNotify, toastErrorNotify } from "../helpers/ToastNotify";
+import GoogleIcon from "../assets/GoogleIcon.jsx";
 
 export default function Register() {
   const [email, setEmail] = useState("");
@@ -80,6 +81,7 @@ export default function Register() {
             onClick={() => signUpProvider()}
           >
             Continue with Google
+            <GoogleIcon color="currentColor" />
           </button>
         </form>
       </div>

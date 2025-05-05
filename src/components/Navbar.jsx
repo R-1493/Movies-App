@@ -19,7 +19,7 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  return (
+  return (setMenuOpen
     <nav className="bg-neutral-100 dark:bg-gray-900 py-3 dark:text-white w-full">
       <div className="flex w-full flex-wrap items-center justify-between px-6">
         <Link className="pr-2 text-2xl font-semibold" to="/">
@@ -35,7 +35,7 @@ const Navbar = () => {
           <img
             className="h-8 w-8 rounded-full cursor-pointer"
             src={img}
-            onClick={() => setMenuOpen(!menuOpen)}
+            onClick={() => (!menuOpen)}
           />
           {menuOpen && (
             <div ref={menuRef} className="relative">

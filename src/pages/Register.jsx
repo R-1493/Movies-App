@@ -11,7 +11,7 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
   const [error, setError] = useState("");
-  const { signUp } = useAuth();
+  const { signUp, signUpProvider } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -23,6 +23,16 @@ export default function Register() {
       navigate("/");
     } catch (err) {
       setError(err.message);
+      toastErrorNotify(err.message);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      await signUpProvider();
+      toastSuccessNotify("Signed in with Google!");
+      navigate("/");
+    } catch (err) {
       toastErrorNotify(err.message);
     }
   };
@@ -76,12 +86,12 @@ export default function Register() {
             Register
           </button>
           <button
-            className="flex justify-between text-center btn-danger"
+            className="flex items-center justify-center gap-2 btn-danger mt-4"
             type="button"
-            onClick={() => signUpProvider()}
+            onClick={handleGoogleSignIn}
           >
-            Continue with Google
             <GoogleIcon color="currentColor" />
+            Continue with Google
           </button>
         </form>
       </div>

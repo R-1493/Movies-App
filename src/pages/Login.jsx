@@ -7,7 +7,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const { logIn } = useAuth();
+  const { logIn, signUpProvider } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -65,12 +65,12 @@ export default function Login() {
             Login
           </button>
           <button
+            className="flex items-center justify-center gap-2 btn-danger mt-4"
             type="button"
-            onClick={() => signUpProvider()}
-            className="flex items-center justify-center gap-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition"
+            onClick={handleGoogleSignIn}
           >
-            Continue with Google
             <GoogleIcon color="currentColor" />
+            Continue with Google
           </button>
         </form>
       </div>

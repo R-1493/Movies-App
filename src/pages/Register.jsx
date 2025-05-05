@@ -1,35 +1,35 @@
-import React, { useContext, useState } from "react";
-// import GoogleIcon from "../assets/icons/GoogleIcon";
-import { AuthContext } from "../context/AuthContext";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { toastSuccessNotify, toastErrorNotify } from "../helpers/ToastNotify";
 
-const Register = () => {
+export default function Register() {
+  const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { createUser, signUpProvider } = useContext(AuthContext);
+  const [displayName, setDisplayName] = useState("");
+  const [error, setError] = useState("");
+  const { signUp } = useAuth();
+  const navigate = useNavigate();
 
-  //* birleştirilmiş state
-  // const [info, setInfo] = useState({
-  //   firstName: "",
-  //   lastName: "",
-  //   email: "",
-  //   password: "",
-  // });
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const displayName = `${firstName} ${lastName}`;
-    createUser(email, password, displayName);
+    setError("");
+    try {
+      await signUp(firstName, lastName, email, password, displayName);
+      toastSuccessNotify("Registered successfully!");
+      navigate("/");
+    } catch (err) {
+      setError(err.message);
+      toastErrorNotify(err.message);
+    }
   };
 
-  // const { email, password, firstName, lastName } = info;
-  // const hadleChange = (e) =>
-  //   setInfo({ ...info, [e.target.id]: e.target.value });
-
   return (
-    <div className="overflow-hidden flex-1 h-screen justify-center items-center bg-[#23242a]">
-      <div className={`form-container mt-[5vh] w-[380px] h-[580px]`}>
+    <div className="overflow-hidden flex-1 h-screen justify-center items-center dark:bg-gray-dark-main">
+      <div className="form-container mt-[5vh] w-[380px] h-[580px]">
+        {error && <p className="text-red-500 mb-4">{error}</p>}
         <form onSubmit={handleSubmit}>
           <h2 className="text-red-main text-2xl font-[500] text-center tracking-[0.1em] mb-3">
             Sign Up
@@ -37,48 +37,41 @@ const Register = () => {
           <div className="relative z-0 w-full mb-6 group">
             <input
               type="text"
-              name="floating_text"
+              placeholder="First Name"
               className="peer"
-              placeholder=" "
+              onChange={(e) => setDisplayName(e.target.value)}
               required
-              onChange={(e) => setFirstName(e.target.value)}
             />
-            <label htmlFor="floating_email">First Name</label>
           </div>
           <div className="relative z-0 w-full mb-6 group">
             <input
-              name="floating_text"
               type="text"
-              required
+              placeholder="Last Name"
               className="peer"
-              placeholder=" "
+              value={lastName}
               onChange={(e) => setLastName(e.target.value)}
+              required
             />
-            <label htmlFor="floating_text">Last Name</label>
           </div>
           <div className="relative z-0 w-full mb-6 group">
             <input
-              name="floating_email"
               type="email"
+              placeholder="Email"
               className="peer"
-              placeholder=" "
-              required
               onChange={(e) => setEmail(e.target.value)}
+              required
             />
-            <label htmlFor="floating_email">Email</label>
           </div>
           <div className="relative z-0 w-full mb-6 group">
             <input
-              name="floating_password"
               type="password"
+              placeholder="Password"
               className="peer"
-              placeholder=" "
-              required
               onChange={(e) => setPassword(e.target.value)}
+              required
             />
-            <label htmlFor="floating_password">Password</label>
           </div>
-          <button className="btn-danger" type="submit">
+          <button type="submit" className="btn-danger">
             Register
           </button>
           <button
@@ -93,6 +86,91 @@ const Register = () => {
       </div>
     </div>
   );
-};
+}
 
-export default Register;
+// import React, { useContext, useState } from "react";
+// import { toastSuccessNotify, toastErrorNotify } from "../helpers/ToastNotify";
+// import { useNavigate, Link } from "react-router-dom";
+// import { AuthContext } from "../context/AuthContext";
+// import GoogleIcon from "../assets/GoogleIcon";
+// const Register = () => {
+//   const { createUser, signUpProvider } = useContext(AuthContext);
+//   const [email, setEmail] = useState("");
+//   const [firstName, setFirstName] = useState("");
+//   const [lastName, setLastName] = useState("");
+//   const [password, setPassword] = useState("");
+//   const navigate = useNavigate();
+//   const handleRegister = async (e) => {
+//     e.preventDefault();
+//     try {
+//       await createUser(email, password, firstName, lastName);
+//       toastSuccessNotify("Registration successful");
+//       navigate("/");
+//     } catch (err) {
+//       toastErrorNotify("Registration failed", err.message);
+//     }
+//   };
+//   return (
+//     <div className="overflow-hidden flex-1 h-screen justify-center items-center bg-[#23242A]">
+//       <div className="form-container mt-[5vh] w-[380px] h-[580px]">
+//         <form onSubmit={handleRegister}>
+//           <h2 className="text-red-main text-2xl font-[500] text-center tracking-[0.1em] mb-3">
+//             Create Account
+//           </h2>
+//           <div className="relative z-0 w-full mb-6 group">
+//             <input
+//               type="text"
+//               placeholder="First Name"
+//               className="peer"
+//               value={firstName}
+//               onChange={(e) => setFirstName(e.target.value)}
+//               required
+//             />
+//           </div>
+//           <div className="relative z-0 w-full mb-6 group">
+//             <input
+//               type="text"
+//               placeholder="Last Name"
+//               className="peer"
+//               value={lastName}
+//               onChange={(e) => setLastName(e.target.value)}
+//               required
+//             />
+//           </div>
+//           <div className="relative z-0 w-full mb-6 group">
+//             <input
+//               type="email"
+//               placeholder="Email"
+//               className="peer"
+//               value={email}
+//               onChange={(e) => setEmail(e.target.value)}
+//               required
+//             />
+//           </div>
+//           <div className="relative z-0 w-full mb-6 group">
+//             <input
+//               type="password"
+//               placeholder="Password"
+//               className="peer"
+//               value={password}
+//               onChange={(e) => setPassword(e.target.value)}
+//               required
+//             />
+//           </div>
+//           <button type="submit" className="btn-danger">
+//             Register
+//           </button>
+//           <button
+//             className="flex justify-between text-center btn-danger"
+//             type="button"
+//             onClick={() => signUpProvider()}
+//           >
+//             Continue with Google
+//             <GoogleIcon color="currentColor" />
+//           </button>
+//         </form>
+//       </div>
+//     </div>
+//   );
+// };
+// export default Register;
